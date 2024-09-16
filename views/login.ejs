@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="login-btn">Log in</button>
+        </form>
+        <div class="forgot-password">
+            <a href="#">Forgot your password?</a>
+        </div>
+        <div class="or-divider">OR</div>
+        <a href="/auth/facebook"><button class="facebook-btn">Continue with Facebook</button></a>
+        <a href="/auth/google"><button class="google-btn">Continue with Google</button></a>
+        <a href="/auth/discord"><button class="discord-btn">Continue with Discord</button></a>
+    </div>
+</body>
+</html>
