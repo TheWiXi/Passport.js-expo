@@ -6,6 +6,7 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const DiscordStrategy = require('passport-discord').Strategy;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -62,6 +63,19 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+// Passport Discord Strategy
+passport.use(new DiscordStrategy({
+    clientID: process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    callbackURL: "http://localhost:" + PORT + "/auth/discord/callback",
+    scope: ['identify', 'email']
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    // Here you would find or create a user in your database
+    return cb(null, profile);
+  }
+));
+
 // Routes
 app.get("/", (req, res, next) => {
     if(req.isAuthenticated()) return next();
@@ -93,6 +107,14 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
-  });
+});
+
+// Discord Auth Routes
+app.get('/auth/discord', passport.authenticate('discord'));
+app.get('/auth/discord/callback', 
+  passport.authenticate('discord', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+});
 
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
